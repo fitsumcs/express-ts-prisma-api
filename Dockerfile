@@ -12,4 +12,5 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["node", "dist/server.js"]
+# Apply migrations to the linked DB (e.g. Railway Postgres), then start the API
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]

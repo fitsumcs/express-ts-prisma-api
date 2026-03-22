@@ -95,7 +95,7 @@ Use `DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb"` in `.env
 
 ## Deployment notes
 
-- **Railway / similar:** provide `DATABASE_URL` and `PORT`. Run `npx prisma migrate deploy` after deploy or as a release step so tables exist before traffic hits the app.
+- **Railway / similar:** set `DATABASE_URL` (from the platform’s Postgres) and `PORT`. The **Dockerfile** runs `npx prisma migrate deploy` before `node dist/server.js`, so the schema is applied on each deploy. If you ever deploy without that image (for example Nixpacks only), run `npx prisma migrate deploy` manually against production or add a release command.
 - **CI:** `.github/workflows/deploy.yml` runs install, `prisma generate`, and `npm run build` on pushes to `main`.
 
 ## Project layout
