@@ -39,6 +39,15 @@ REST API built with Express 5, TypeScript, and Prisma ORM (PostgreSQL).
 | `npm run dev`  | Run in development with `ts-node-dev` |
 | `npm run build`| Compile TypeScript to `dist/`        |
 | `npm start`    | Run compiled app (`node dist/server.js`) |
+| `npm run db:seed` | Insert/update example user (`demo@example.com`) via `prisma/seed.js` |
+
+After migrations, you can seed locally so `GET /users` returns one user:
+
+```bash
+npm run db:seed
+```
+
+Docker and Railway builds run **migrate → seed → server** automatically.
 
 ## API
 
@@ -110,6 +119,7 @@ src/
 prisma/
   schema.prisma
   migrations/
+  seed.js
 docker-compose.yml
 ```
 

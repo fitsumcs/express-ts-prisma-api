@@ -12,5 +12,5 @@ RUN npm run build
 
 EXPOSE 3000
 
-# Apply migrations to the linked DB (e.g. Railway Postgres), then start the API
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+# Migrations, example seed row, then API (Railway / Compose)
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node dist/server.js"]
