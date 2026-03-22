@@ -40,6 +40,9 @@ REST API built with Express 5, TypeScript, and Prisma ORM (PostgreSQL).
 | `npm run build`| Compile TypeScript to `dist/`        |
 | `npm start`    | Run compiled app (`node dist/server.js`) |
 | `npm run db:seed` | Insert/update example user (`demo@example.com`) via `prisma/seed.js` |
+| `npm run lint`   | ESLint (`eslint.config.mjs`)       |
+| `npm run test`   | Vitest (see `src/app.test.ts`)     |
+| `npm run test:watch` | Vitest watch mode            |
 
 After migrations, you can seed locally so `GET /users` returns one user:
 
@@ -105,7 +108,7 @@ Use `DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb"` in `.env
 ## Deployment notes
 
 - **Railway / similar:** set `DATABASE_URL` (from the platform’s Postgres) and `PORT`. The **Dockerfile** runs `npx prisma migrate deploy` before `node dist/server.js`, so the schema is applied on each deploy. If you ever deploy without that image (for example Nixpacks only), run `npx prisma migrate deploy` manually against production or add a release command.
-- **CI:** `.github/workflows/deploy.yml` runs install, `prisma generate`, and `npm run build` on pushes to `main`.
+- **CI:** `.github/workflows/deploy.yml` runs `npm ci`, `prisma generate`, **lint**, **tests**, and `npm run build` on pushes to `main`.
 
 ## Project layout
 
