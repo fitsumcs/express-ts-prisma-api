@@ -26,9 +26,11 @@ REST API built with Express 5, TypeScript, and Prisma ORM (PostgreSQL).
 3. Create the database schema and generate the Prisma client:
 
    ```bash
-   npx prisma migrate dev --name init
+   npx prisma migrate dev
    npx prisma generate
    ```
+
+   The repo includes an initial migration under `prisma/migrations/`. If you prefer Docker Compose for Postgres, start the DB first (`docker compose up -d db`) and point `DATABASE_URL` at it before running the commands above.
 
 ## Scripts
 
@@ -70,6 +72,27 @@ Apply migrations against the deployment database:
 npx prisma migrate deploy
 ```
 
+### Docker Compose (app + PostgreSQL)
+
+Start the API and database together. The app waits for Postgres to be healthy, runs `prisma migrate deploy`, then starts the server.
+
+```bash
+docker compose up --build
+```
+
+- **API:** http://localhost:3000  
+- **Postgres:** `localhost:5432`, user `postgres`, password `postgres`, database `mydb`  
+
+If port `5432` is already used on your machine, change the host mapping in `docker-compose.yml` (for example `"5433:5432"` under `db.ports`).
+
+**Database only** (run the app on the host with `npm run dev`):
+
+```bash
+docker compose up -d db
+```
+
+Use `DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb"` in `.env` (adjust the port if you changed the mapping).
+
 ## Deployment notes
 
 - **Railway / similar:** provide `DATABASE_URL` and `PORT`. Run `npx prisma migrate deploy` after deploy or as a release step so tables exist before traffic hits the app.
@@ -86,6 +109,8 @@ src/
   controllers/
 prisma/
   schema.prisma
+  migrations/
+docker-compose.yml
 ```
 
 Prisma is pinned to **v6** so the client matches the classic `PrismaClient` setup from typical Express + Prisma tutorials. Upgrading to Prisma 7 requires schema and client changes (driver adapters, config).
